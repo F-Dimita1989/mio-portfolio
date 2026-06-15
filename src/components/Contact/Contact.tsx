@@ -1,8 +1,11 @@
+import { routeId } from '../../data/routes'
 import { contacts } from '../../data/contacts'
 import { notifyCvDownload } from '../../lib/appToast'
-import { BentoCell } from '../Bento/BentoCell'
-import { BentoGrid } from '../Bento/BentoGrid'
+import { MotionReveal } from '../Animate/MotionReveal'
+import { MotionStaggerGrid } from '../Animate/MotionStaggerGrid'
 import { Reveal } from '../Animate/Reveal'
+import { TechComment } from '../Animate/TechComment'
+import { BentoCell } from '../Bento/BentoCell'
 import { contactIcons } from '../Icon/contactIcons'
 import { RadixIcon } from '../Icon/RadixIcon'
 import { Section } from '../Section/Section'
@@ -11,7 +14,7 @@ import { ContactForm } from './ContactForm'
 export function Contact() {
   return (
     <Section
-      id="contact"
+      id={routeId('contatti')}
       eyebrow="contatti"
       title="Parliamone"
       subtitle="Compila il form o contattami direttamente per collaborazioni, stage o progetti."
@@ -22,13 +25,10 @@ export function Contact() {
         </Reveal>
 
         <div>
-          <p className="tech-label mb-4">
-            <span className="text-text-muted">{'// '}</span>
-            altri canali
-          </p>
-          <BentoGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {contacts.map((contact, index) => (
-              <Reveal key={contact.id} as="li" className="list-none" delay={index * 70} variant="scale-in" duration={650}>
+          <TechComment text="altri canali" className="mb-4" prefixTone="muted" delay={80} />
+          <MotionStaggerGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {contacts.map((contact) => (
+              <MotionReveal key={contact.id} as="li" className="list-none" variant="scale-in">
                 <BentoCell
                   as="a"
                   variant="links"
@@ -54,9 +54,9 @@ export function Contact() {
                     </span>
                   </span>
                 </BentoCell>
-              </Reveal>
+              </MotionReveal>
             ))}
-          </BentoGrid>
+          </MotionStaggerGrid>
         </div>
       </div>
     </Section>

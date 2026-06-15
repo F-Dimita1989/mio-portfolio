@@ -1,18 +1,18 @@
-import type { ElementType, ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { m, useReducedMotion } from 'motion/react'
+import { usePageReady } from '../../hooks/usePageReady'
 import { useInView } from '../../hooks/useInView'
 import { cn } from '../../lib/cn'
+import { type MotionRevealVariant, reducedMotionItem, revealItemVariants } from './motionVariants'
+import { RevealVisibilityContext } from './revealVisibilityContext'
 
-type RevealVariant =
-  | 'fade-up'
-  | 'fade-in'
-  | 'fade-down'
-  | 'scale-in'
-  | 'slide-left'
-  | 'slide-right'
+type RevealVariant = MotionRevealVariant
+
+type RevealAs = keyof typeof motionElements
 
 type RevealProps = {
   children: ReactNode
-  as?: ElementType
+  as?: RevealAs
   className?: string
   variant?: RevealVariant
   delay?: number
@@ -20,37 +20,44 @@ type RevealProps = {
   immediate?: boolean
 }
 
-const variantClass: Record<RevealVariant, string> = {
-  'fade-up': 'reveal-fade-up',
-  'fade-in': 'reveal-fade-in',
-  'fade-down': 'reveal-fade-down',
-  'scale-in': 'reveal-scale-in',
-  'slide-left': 'reveal-slide-left',
-  'slide-right': 'reveal-slide-right',
-}
+const motionElements = {
+  div: m.div,
+  header: m.header,
+  li: m.li,
+} as const
 
 export function Reveal({
   children,
-  as: Component = 'div',
+  as = 'div',
   className,
   variant = 'fade-up',
   delay = 0,
   duration = 700,
   immediate = false,
 }: RevealProps) {
-  const { ref, isInView } = useInView()
-  const visible = immediate || isInView
+  const pageReady = usePageReady()
+  const reduceMotion = useReducedMotion()
+  const { ref, isInView } = useInView({ threshold: 0.12, rootMargin: '0px 0px -4% 0px' })
+  const active = pageReady && (immediate || isInView)
+  const variants = reduceMotion ? reducedMotionItem : revealItemVariants[variant]
+  const MotionEl = motionElements[as]
 
   return (
-    <Component
-      ref={ref as never}
-      className={cn('reveal', variantClass[variant], visible && 'reveal-visible', className)}
-      style={{
-        transitionDuration: `${duration}ms`,
-        transitionDelay: `${delay}ms`,
-      }}
-    >
-      {children}
-    </Component>
+    <RevealVisibilityContext.Provider value={active}>
+      <MotionEl
+        ref={ref as never}
+        className={cn(className)}
+        variants={variants}
+        initial="hidden"
+        animate={active ? 'show' : 'hidden'}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : { duration: duration / 1000, delay: delay / 1000, ease: [0.22, 1, 0.36, 1] }
+        }
+      >
+        {children}
+      </MotionEl>
+    </RevealVisibilityContext.Provider>
   )
 }

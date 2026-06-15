@@ -1,4 +1,6 @@
 import { profile } from '../../data/profile'
+import { routeHash } from '../../data/routes'
+import { scrollToRoute } from '../../lib/scrollToRoute'
 import { Reveal } from '../Animate/Reveal'
 import { Logo } from '../Logo/Logo'
 
@@ -10,8 +12,12 @@ export function Footer() {
       <Reveal variant="fade-in" duration={600} className="w-full">
         <div className="container-page flex w-full flex-col gap-4 font-mono text-[0.6875rem] leading-none tracking-wide text-text-muted sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <a
-            href="#hero"
+            href={routeHash('home')}
             className="touch-target group flex items-center gap-2.5 transition-colors duration-200 active:text-accent motion-safe:hover:text-accent"
+            onClick={(event) => {
+              event.preventDefault()
+              scrollToRoute('home')
+            }}
           >
             <Logo size="sm" />
             <span>© {year} {profile.name}</span>

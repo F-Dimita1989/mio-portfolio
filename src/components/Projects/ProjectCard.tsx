@@ -2,6 +2,7 @@ import { ExternalLinkIcon, GitHubLogoIcon } from '@radix-ui/react-icons'
 import type { Project } from '../../data/projects'
 import type { BentoVariant } from '../Bento/BentoCell'
 import { BentoCell } from '../Bento/BentoCell'
+import { TechComment } from '../Animate/TechComment'
 import { SkillChip } from '../Icon/SkillChip'
 import { RadixIcon } from '../Icon/RadixIcon'
 
@@ -31,10 +32,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className="h-full"
       aria-labelledby={`project-${project.id}-title`}
     >
-      <p className="tech-label mb-3">
-        <span className="text-accent/80">{'// '}</span>
-        {statusLabels[project.status]}
-      </p>
+      <TechComment text={statusLabels[project.status]} className="mb-3" delay={90} />
 
       <h3 id={`project-${project.id}-title`} className="mb-2 text-base text-text-heading sm:text-lg">
         {project.title}

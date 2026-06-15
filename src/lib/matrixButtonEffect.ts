@@ -13,9 +13,25 @@ type MatrixState = {
   columns: MatrixColumn[]
   rafId: number
   active: boolean
+  touchStopTimer?: number
 }
 
 const states = new WeakMap<HTMLElement, MatrixState>()
+const TOUCH_STOP_DELAY_MS = 180
+
+function clearTouchStopTimer(state: MatrixState) {
+  if (state.touchStopTimer === undefined) return
+  window.clearTimeout(state.touchStopTimer)
+  state.touchStopTimer = undefined
+}
+
+function scheduleTouchStop(button: HTMLElement, state: MatrixState) {
+  clearTouchStopTimer(state)
+  state.touchStopTimer = window.setTimeout(() => {
+    state.touchStopTimer = undefined
+    stopMatrix(button)
+  }, TOUCH_STOP_DELAY_MS)
+}
 
 function randomChar(): string {
   return MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)] ?? '0'
@@ -108,6 +124,7 @@ function stopMatrix(button: HTMLElement) {
   const state = states.get(button)
   if (!state || !state.active) return
 
+  clearTouchStopTimer(state)
   state.active = false
   button.classList.remove('matrix-btn--active')
   cancelAnimationFrame(state.rafId)
@@ -135,16 +152,44 @@ function setupMatrixButton(button: HTMLElement) {
   }
   states.set(button, state)
 
-  const onEnter = () => startMatrix(button)
-  const onLeave = () => stopMatrix(button)
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
+  const onMouseEnter = () => startMatrix(button)
+  const onMouseLeave = () => stopMatrix(button)
+  const onFocus = () => {
+    if (button.matches(':focus-visible')) startMatrix(button)
+  }
+  const onBlur = () => {
+    if (state.touchStopTimer !== undefined) return
+    stopMatrix(button)
+  }
+  const onPointerDown = (event: PointerEvent) => {
+    if (event.pointerType !== 'touch') return
+    clearTouchStopTimer(state)
+    startMatrix(button)
+  }
+  const onPointerUp = (event: PointerEvent) => {
+    if (event.pointerType !== 'touch') return
+    scheduleTouchStop(button, state)
+  }
+  const onPointerCancel = (event: PointerEvent) => {
+    if (event.pointerType !== 'touch') return
+    stopMatrix(button)
+  }
   const onResize = () => {
     if (state.active) resizeMatrix(button, state)
   }
 
-  button.addEventListener('mouseenter', onEnter)
-  button.addEventListener('mouseleave', onLeave)
-  button.addEventListener('focus', onEnter)
-  button.addEventListener('blur', onLeave)
+  if (canHover) {
+    button.addEventListener('mouseenter', onMouseEnter)
+    button.addEventListener('mouseleave', onMouseLeave)
+  }
+
+  button.addEventListener('pointerdown', onPointerDown)
+  button.addEventListener('pointerup', onPointerUp)
+  button.addEventListener('pointercancel', onPointerCancel)
+  button.addEventListener('focus', onFocus)
+  button.addEventListener('blur', onBlur)
   window.addEventListener('resize', onResize)
 }
 

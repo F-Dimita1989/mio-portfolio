@@ -1,6 +1,9 @@
 import { Cross2Icon, HamburgerMenuIcon } from '@radix-ui/react-icons'
-import { useEffect, useState } from 'react'
-import { navItems } from '../../data/navigation'
+import { m, useReducedMotion } from 'motion/react'
+import { useEffect, useState, type MouseEvent } from 'react'
+import { navItems, routeHash, routeId, type RouteKey } from '../../data/routes'
+import { usePageReady } from '../../hooks/usePageReady'
+import { scrollToRoute, getScrollOffset } from '../../lib/scrollToRoute'
 import { profile } from '../../data/profile'
 import { cn } from '../../lib/cn'
 import { Logo } from '../Logo/Logo'
@@ -8,9 +11,11 @@ import { RadixIcon } from '../Icon/RadixIcon'
 
 const bannerHeaderSrc = encodeURI('/ChatGPT Image 15 giu 2026, 12_06_05.png')
 
-const sectionIds = navItems.map((item) => item.href.replace('#', ''))
+const sectionIds = navItems.map((item) => item.id)
 
 export function Header() {
+  const pageReady = usePageReady()
+  const reduceMotion = useReducedMotion()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('')
@@ -24,11 +29,11 @@ export function Header() {
 
   useEffect(() => {
     const getActiveSection = () => {
-      const offset = 96
+      const offset = getScrollOffset()
       const scrollY = window.scrollY + offset
-      const hero = document.getElementById('hero')
+      const home = document.getElementById(routeId('home'))
 
-      if (hero && scrollY < hero.offsetTop + hero.offsetHeight * 0.55) {
+      if (home && scrollY < home.offsetTop + home.offsetHeight * 0.55) {
         return ''
       }
 
@@ -59,32 +64,44 @@ export function Header() {
 
   const closeMenu = () => setMenuOpen(false)
 
+  const handleRouteClick = (event: MouseEvent<HTMLAnchorElement>, key: RouteKey) => {
+    event.preventDefault()
+    closeMenu()
+    window.requestAnimationFrame(() => scrollToRoute(key))
+  }
+
   return (
     <header className="relative z-[100]">
       <div className="relative w-full overflow-hidden border-b border-border bg-bg-banner lg:aspect-[1915/657]">
-        <img
+        <m.img
           src={bannerHeaderSrc}
           alt="Banner hero Filippo Dimita"
           width={1915}
           height={821}
-          className="animate-banner-enter block h-auto w-full lg:absolute lg:inset-0 lg:h-full lg:object-cover lg:object-center"
+          className="block h-auto w-full lg:absolute lg:inset-0 lg:h-full lg:object-cover lg:object-center"
           loading="eager"
           decoding="async"
           fetchPriority="high"
+          initial={reduceMotion ? false : { opacity: 0, scale: 1.03 }}
+          animate={pageReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.03 }}
+          transition={{ duration: reduceMotion ? 0 : 1, ease: 'easeOut' }}
         />
       </div>
 
-      <div
+      <m.div
         className={cn(
-          'animate-nav-enter sticky top-0 z-20 border-b border-border bg-bg/95 backdrop-blur-sm transition-colors duration-200',
+          'sticky top-0 z-20 border-b border-border bg-bg/95 backdrop-blur-sm transition-colors duration-200',
           scrolled && 'border-border-accent/50 bg-bg',
         )}
+        initial={reduceMotion ? false : { opacity: 0, y: -12 }}
+        animate={pageReady ? { opacity: 1, y: 0 } : { opacity: 0, y: -12 }}
+        transition={{ duration: reduceMotion ? 0 : 0.7, delay: reduceMotion ? 0 : 0.15, ease: 'easeOut' }}
       >
         <div className="container-page relative flex min-h-12 items-center md:grid md:min-h-14 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6">
           <a
-            href="#hero"
+            href={routeHash('home')}
             className="touch-target group flex shrink-0 items-center gap-2 px-1 py-1 md:col-start-1 md:row-start-1 md:justify-self-start"
-            onClick={closeMenu}
+            onClick={(event) => handleRouteClick(event, 'home')}
           >
             <Logo size="sm" />
             <span className="flex min-w-0 flex-col justify-center leading-tight">
@@ -134,10 +151,10 @@ export function Header() {
                       href={item.href}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
-                        'relative inline-flex min-h-11 w-full items-center px-3 font-mono text-xs tracking-wide uppercase transition-[transform,opacity,color] duration-300 ease-out',
+                        'relative inline-flex min-h-11 w-full items-center gap-3 px-3 font-mono text-xs tracking-wide uppercase transition-[transform,opacity,color] duration-300 ease-out',
                         'max-md:translate-y-2 max-md:opacity-0',
                         menuOpen && 'max-md:translate-y-0 max-md:opacity-100',
-                        'md:translate-y-0 md:opacity-100 md:transition-colors md:duration-200',
+                        'md:translate-y-0 md:opacity-100 md:gap-0 md:transition-colors md:duration-200',
                         'md:after:absolute md:after:bottom-0 md:after:left-3 md:after:h-px md:after:w-[calc(100%-1.5rem)] md:after:origin-left md:after:scale-x-0 md:after:bg-accent md:after:transition-transform md:after:duration-300',
                         'active:text-accent motion-safe:md:hover:text-text-heading motion-safe:md:hover:after:scale-x-100',
                         isActive ? 'text-accent' : 'text-text-muted',
@@ -147,9 +164,12 @@ export function Header() {
                           ? { transitionDelay: `${100 + index * 55}ms` }
                           : { transitionDelay: '0ms' }
                       }
-                      onClick={closeMenu}
+                      onClick={(event) => handleRouteClick(event, item.key)}
                     >
-                      {item.label}
+                      <span className="shrink-0 text-[0.625rem] tracking-[0.12em] text-accent/75 md:hidden">
+                        {item.href}
+                      </span>
+                      <span>{item.label}</span>
                     </a>
                   </li>
                 )
@@ -157,7 +177,7 @@ export function Header() {
             </ul>
           </nav>
         </div>
-      </div>
+      </m.div>
 
       {menuOpen && (
         <button

@@ -17,6 +17,10 @@ import { cn } from '../../lib/cn'
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error'
 
+type RequiredField = 'name' | 'email' | 'message'
+
+type FieldErrors = Partial<Record<RequiredField, boolean>>
+
 type FormFields = {
   name: string
   email: string
@@ -35,11 +39,22 @@ function formatCooldown(seconds: number): string {
   return seconds <= 1 ? '1 secondo' : `${seconds} secondi`
 }
 
+function getFieldErrors(name: string, email: string, message: string): FieldErrors {
+  const errors: FieldErrors = {}
+
+  if (!name) errors.name = true
+  if (!email || !isValidEmail(email)) errors.email = true
+  if (!message) errors.message = true
+
+  return errors
+}
+
 export function ContactForm() {
   const honeypotRef = useRef<HTMLInputElement>(null)
   const [fields, setFields] = useState<FormFields>(initialFields)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [cooldownMs, setCooldownMs] = useState(0)
 
   useEffect(() => {
@@ -55,6 +70,13 @@ export function ContactForm() {
   const updateField = (key: keyof FormFields, value: string) => {
     const limit = FIELD_LIMITS[key]
     setFields((prev) => ({ ...prev, [key]: value.slice(0, limit) }))
+    if (key in fieldErrors) {
+      setFieldErrors((prev) => {
+        const next = { ...prev }
+        delete next[key as RequiredField]
+        return next
+      })
+    }
     if (status === 'error') {
       setStatus('idle')
       setErrorMessage('')
@@ -84,19 +106,16 @@ export function ContactForm() {
     const subject = fields.subject.trim()
     const message = fields.message.trim()
 
-    if (!name || !email || !message) {
-      const message = 'Compila tutti i campi obbligatori.'
+    const validationErrors = getFieldErrors(name, email, message)
+    if (Object.keys(validationErrors).length > 0) {
+      const toastMessage =
+        !name || !email || !message
+          ? 'Compila tutti i campi obbligatori.'
+          : 'Inserisci un indirizzo email valido.'
+      setFieldErrors(validationErrors)
       setStatus('error')
-      setErrorMessage(message)
-      appToast.formError(message)
-      return
-    }
-
-    if (!isValidEmail(email)) {
-      const message = 'Inserisci un indirizzo email valido.'
-      setStatus('error')
-      setErrorMessage(message)
-      appToast.formError(message)
+      setErrorMessage(toastMessage)
+      appToast.formError(toastMessage)
       return
     }
 
@@ -105,13 +124,18 @@ export function ContactForm() {
       !isWithinLimit(subject, FIELD_LIMITS.subject) ||
       !isWithinLimit(message, FIELD_LIMITS.message)
     ) {
-      const message = 'Uno o più campi superano la lunghezza massima consentita.'
+      const limitMessage = 'Uno o più campi superano la lunghezza massima consentita.'
+      const limitErrors: FieldErrors = {}
+      if (!isWithinLimit(name, FIELD_LIMITS.name)) limitErrors.name = true
+      if (!isWithinLimit(message, FIELD_LIMITS.message)) limitErrors.message = true
+      setFieldErrors(limitErrors)
       setStatus('error')
-      setErrorMessage(message)
-      appToast.formError(message)
+      setErrorMessage(limitMessage)
+      appToast.formError(limitMessage)
       return
     }
 
+    setFieldErrors({})
     setStatus('sending')
     setErrorMessage('')
 
@@ -143,6 +167,7 @@ export function ContactForm() {
       setCooldownMs(SUBMIT_COOLDOWN_MS)
       setFields(initialFields)
       if (honeypotRef.current) honeypotRef.current.value = ''
+      setFieldErrors({})
       setStatus('success')
       appToast.formSuccess()
     } catch (error) {
@@ -169,7 +194,10 @@ export function ContactForm() {
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
         <div className="flex flex-col gap-2">
-          <label htmlFor="contact-name" className="field-label">
+          <label
+            htmlFor="contact-name"
+            className={cn('field-label', fieldErrors.name && 'field-label--error')}
+          >
             Nome <span className="text-accent">*</span>
           </label>
           <input
@@ -181,14 +209,18 @@ export function ContactForm() {
             maxLength={FIELD_LIMITS.name}
             value={fields.name}
             onChange={(e) => updateField('name', e.target.value)}
-            className="field-input"
+            className={cn('field-input', fieldErrors.name && 'field-input--error')}
             placeholder="Il tuo nome"
             disabled={isDisabled}
+            aria-invalid={fieldErrors.name || undefined}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="contact-email" className="field-label">
+          <label
+            htmlFor="contact-email"
+            className={cn('field-label', fieldErrors.email && 'field-label--error')}
+          >
             Email <span className="text-accent">*</span>
           </label>
           <input
@@ -201,9 +233,10 @@ export function ContactForm() {
             maxLength={FIELD_LIMITS.email}
             value={fields.email}
             onChange={(e) => updateField('email', e.target.value)}
-            className="field-input"
+            className={cn('field-input', fieldErrors.email && 'field-input--error')}
             placeholder="nome@esempio.com"
             disabled={isDisabled}
+            aria-invalid={fieldErrors.email || undefined}
           />
         </div>
       </div>
@@ -226,7 +259,10 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="contact-message" className="field-label">
+        <label
+          htmlFor="contact-message"
+          className={cn('field-label', fieldErrors.message && 'field-label--error')}
+        >
           Messaggio <span className="text-accent">*</span>
         </label>
         <textarea
@@ -237,9 +273,10 @@ export function ContactForm() {
           maxLength={FIELD_LIMITS.message}
           value={fields.message}
           onChange={(e) => updateField('message', e.target.value)}
-          className="field-input min-h-32 resize-y"
+          className={cn('field-input min-h-32 resize-y', fieldErrors.message && 'field-input--error')}
           placeholder="Scrivi qui il tuo messaggio..."
           disabled={isDisabled}
+          aria-invalid={fieldErrors.message || undefined}
         />
       </div>
 

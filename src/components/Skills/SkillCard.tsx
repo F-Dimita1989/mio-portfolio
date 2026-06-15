@@ -1,6 +1,7 @@
 import type { SkillGroup } from '../../data/skills'
 import type { BentoVariant } from '../Bento/BentoCell'
 import { BentoCell } from '../Bento/BentoCell'
+import { TechComment } from '../Animate/TechComment'
 import { SkillChip } from '../Icon/SkillChip'
 
 const skillVariants: Record<string, BentoVariant> = {
@@ -21,10 +22,7 @@ export function SkillCard({ group }: SkillCardProps) {
 
   return (
     <BentoCell as="article" variant={variant} className="h-full" aria-labelledby={titleId}>
-      <p className="tech-label mb-3">
-        <span className="text-accent/80">{'// '}</span>
-        stack
-      </p>
+      <TechComment text="stack" className="mb-3" delay={90} />
 
       <h3 id={titleId} className="mb-4 text-base text-text-heading sm:text-lg">
         {group.category}

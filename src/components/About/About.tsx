@@ -1,26 +1,25 @@
+import { routeId } from '../../data/routes'
 import { profile } from '../../data/profile'
+import { MotionReveal } from '../Animate/MotionReveal'
+import { MotionStaggerGrid } from '../Animate/MotionStaggerGrid'
+import { TechComment } from '../Animate/TechComment'
 import { BentoCell } from '../Bento/BentoCell'
-import { BentoGrid } from '../Bento/BentoGrid'
-import { Reveal } from '../Animate/Reveal'
+import { SkillChip } from '../Icon/SkillChip'
 import { Section } from '../Section/Section'
-import { cn } from '../../lib/cn'
 
 export function About() {
   return (
     <Section
-      id="about"
+      id={routeId('profilo')}
       eyebrow="about"
       title="Chi sono"
       subtitle="Frontend, formazione full stack e valori che guidano il mio lavoro."
       alt
     >
-      <BentoGrid className="grid-cols-1 lg:grid-cols-12">
-        <Reveal className="lg:col-span-8" variant="fade-up" duration={750}>
+      <MotionStaggerGrid className="grid-cols-1 lg:grid-cols-12">
+        <MotionReveal className="lg:col-span-8">
           <BentoCell variant="card" className="h-full">
-            <p className="tech-label mb-4">
-              <span className="text-accent/80">{'// '}</span>
-              profilo
-            </p>
+            <TechComment text="profilo" className="mb-4" delay={80} />
             <div className="flex flex-col gap-5">
               {profile.about.map((paragraph, index) => (
                 <p key={index} className="max-w-prose text-sm leading-relaxed text-text-muted sm:text-base">
@@ -29,30 +28,21 @@ export function About() {
               ))}
             </div>
           </BentoCell>
-        </Reveal>
+        </MotionReveal>
 
-        <Reveal className="lg:col-span-4" delay={180} variant="scale-in" duration={750}>
+        <MotionReveal className="lg:col-span-4" variant="scale-in">
           <BentoCell variant="accent" className="h-full">
-            <p className="tech-label mb-4">
-              <span className="text-accent/80">{'// '}</span>
-              interessi
-            </p>
-            <ul className="flex flex-col gap-2">
+            <TechComment text="interessi" className="mb-4" delay={80} />
+            <ul className="flex flex-wrap gap-1.5 bento-chip-list">
               {profile.interests.map((interest, index) => (
-                <li
-                  key={interest}
-                  className={cn(
-                    'font-mono text-xs sm:text-sm',
-                    index < 2 ? 'text-accent' : 'text-text',
-                  )}
-                >
-                  {interest}
+                <li key={interest}>
+                  <SkillChip label={interest} accent={index < 2} />
                 </li>
               ))}
             </ul>
           </BentoCell>
-        </Reveal>
-      </BentoGrid>
+        </MotionReveal>
+      </MotionStaggerGrid>
     </Section>
   )
 }

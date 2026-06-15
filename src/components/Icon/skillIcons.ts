@@ -14,25 +14,79 @@ import {
   faTypescript,
   faWordpress,
 } from '@fortawesome/free-brands-svg-icons'
+import type { IconType } from 'react-icons'
+import {
+  SiCss,
+  SiEslint,
+  SiGooglefit,
+  SiLighthouse,
+  SiMysql,
+  SiSqlite,
+  SiSupabase,
+  SiVite,
+} from 'react-icons/si'
 
-const skillIconMap: Record<string, IconDefinition> = {
-  React: faReact,
-  'React Native': faReact,
-  'Next.js': faNodeJs,
-  Angular: faAngular,
-  TypeScript: faTypescript,
-  JavaScript: faJs,
-  HTML5: faHtml5,
-  CSS3: faCss3Alt,
-  'Tailwind CSS': faTailwindCss,
-  'C# / .NET': faMicrosoft,
-  '.NET / C#': faMicrosoft,
-  Git: faGitAlt,
-  GitHub: faGithub,
-  WordPress: faWordpress,
-  Python: faPython,
+export type SkillIcon =
+  | { kind: 'fa'; icon: IconDefinition }
+  | { kind: 'si'; icon: IconType }
+
+const skillIconMap: Record<string, SkillIcon> = {
+  React: { kind: 'fa', icon: faReact },
+  'React Native': { kind: 'fa', icon: faReact },
+  'React & TypeScript': { kind: 'fa', icon: faReact },
+  'Next.js': { kind: 'fa', icon: faNodeJs },
+  Angular: { kind: 'fa', icon: faAngular },
+  TypeScript: { kind: 'fa', icon: faTypescript },
+  JavaScript: { kind: 'fa', icon: faJs },
+  HTML5: { kind: 'fa', icon: faHtml5 },
+  CSS3: { kind: 'fa', icon: faCss3Alt },
+  'Tailwind CSS': { kind: 'fa', icon: faTailwindCss },
+  'C# / .NET': { kind: 'fa', icon: faMicrosoft },
+  '.NET / C#': { kind: 'fa', icon: faMicrosoft },
+  Git: { kind: 'fa', icon: faGitAlt },
+  GitHub: { kind: 'fa', icon: faGithub },
+  'Git & GitHub': { kind: 'fa', icon: faGithub },
+  WordPress: { kind: 'fa', icon: faWordpress },
+  Python: { kind: 'fa', icon: faPython },
+  Vite: { kind: 'si', icon: SiVite },
+  Supabase: { kind: 'si', icon: SiSupabase },
+  MySQL: { kind: 'si', icon: SiMysql },
+  SQLite: { kind: 'si', icon: SiSqlite },
+  'MySQL & SQLite': { kind: 'si', icon: SiMysql },
+  'Health Tech': { kind: 'si', icon: SiGooglefit },
+  'UI responsive': { kind: 'si', icon: SiCss },
+  'Performance & UX': { kind: 'si', icon: SiLighthouse },
+  'Clean code': { kind: 'si', icon: SiEslint },
 }
 
-export function getSkillIcon(skill: string): IconDefinition | undefined {
-  return skillIconMap[skill]
+const skillKeywordRules: [RegExp, SkillIcon][] = [
+  [/supabase/i, { kind: 'si', icon: SiSupabase }],
+  [/vite/i, { kind: 'si', icon: SiVite }],
+  [/sqlite/i, { kind: 'si', icon: SiSqlite }],
+  [/mysql/i, { kind: 'si', icon: SiMysql }],
+  [/health/i, { kind: 'si', icon: SiGooglefit }],
+  [/responsive/i, { kind: 'si', icon: SiCss }],
+  [/performance|ux/i, { kind: 'si', icon: SiLighthouse }],
+  [/clean\s*code/i, { kind: 'si', icon: SiEslint }],
+  [/github/i, { kind: 'fa', icon: faGithub }],
+  [/git/i, { kind: 'fa', icon: faGitAlt }],
+  [/typescript/i, { kind: 'fa', icon: faTypescript }],
+  [/react/i, { kind: 'fa', icon: faReact }],
+  [/next\.?js/i, { kind: 'fa', icon: faNodeJs }],
+  [/angular/i, { kind: 'fa', icon: faAngular }],
+  [/javascript/i, { kind: 'fa', icon: faJs }],
+  [/tailwind/i, { kind: 'fa', icon: faTailwindCss }],
+  [/html\s*5?/i, { kind: 'fa', icon: faHtml5 }],
+  [/css\s*3?/i, { kind: 'fa', icon: faCss3Alt }],
+  [/python/i, { kind: 'fa', icon: faPython }],
+  [/wordpress/i, { kind: 'fa', icon: faWordpress }],
+  [/(\.net|c#)/i, { kind: 'fa', icon: faMicrosoft }],
+  [/node\.?js/i, { kind: 'fa', icon: faNodeJs }],
+]
+
+export function getSkillIcon(skill: string): SkillIcon | undefined {
+  const exact = skillIconMap[skill]
+  if (exact) return exact
+
+  return skillKeywordRules.find(([pattern]) => pattern.test(skill))?.[1]
 }

@@ -1,30 +1,28 @@
+import { routeId } from '../../data/routes'
 import { projects } from '../../data/projects'
-import { BentoGrid } from '../Bento/BentoGrid'
-import { Reveal } from '../Animate/Reveal'
+import { MotionReveal } from '../Animate/MotionReveal'
+import { MotionStaggerGrid } from '../Animate/MotionStaggerGrid'
 import { Section } from '../Section/Section'
 import { ProjectCard } from './ProjectCard'
+import { ProjectsFolder } from './ProjectsFolder'
 
 export function Projects() {
   return (
     <Section
-      id="projects"
+      id={routeId('progetti')}
       eyebrow="progetti"
       title="Cosa sviluppo"
       subtitle="Progetti reali su cui sto lavorando: web app, portfolio e health tech."
     >
-      <BentoGrid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project, index) => (
-          <Reveal
-            key={project.id}
-            className="h-full"
-            delay={index * 80}
-            variant="fade-up"
-            duration={700}
-          >
+      <ProjectsFolder />
+
+      <MotionStaggerGrid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project) => (
+          <MotionReveal key={project.id} className="h-full">
             <ProjectCard project={project} />
-          </Reveal>
+          </MotionReveal>
         ))}
-      </BentoGrid>
+      </MotionStaggerGrid>
     </Section>
   )
 }

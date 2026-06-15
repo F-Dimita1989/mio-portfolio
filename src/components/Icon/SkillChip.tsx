@@ -1,5 +1,5 @@
 import { cn } from '../../lib/cn'
-import { BrandIcon } from './BrandIcon'
+import { TechIcon } from './TechIcon'
 import { getSkillIcon } from './skillIcons'
 
 type SkillChipProps = {
@@ -13,7 +13,7 @@ export function SkillChip({ label, accent = false, className }: SkillChipProps) 
 
   return (
     <span className={cn('bento-chip', accent && 'bento-chip--accent', className)}>
-      {icon && <BrandIcon icon={icon} />}
+      {icon && <TechIcon icon={icon} />}
       {label}
     </span>
   )
