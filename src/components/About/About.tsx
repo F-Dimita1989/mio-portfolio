@@ -1,6 +1,9 @@
 import { profile } from '../../data/profile'
+import { BentoCell } from '../Bento/BentoCell'
+import { BentoGrid } from '../Bento/BentoGrid'
 import { Reveal } from '../Animate/Reveal'
 import { Section } from '../Section/Section'
+import { cn } from '../../lib/cn'
 
 export function About() {
   return (
@@ -11,31 +14,45 @@ export function About() {
       subtitle="Frontend, formazione full stack e valori che guidano il mio lavoro."
       alt
     >
-      <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
-        <Reveal className="flex min-w-0 flex-1 flex-col gap-5" variant="fade-up" duration={750}>
-          {profile.about.map((paragraph, index) => (
-            <p key={index} className="max-w-prose text-sm leading-relaxed text-text-muted sm:text-base">
-              {paragraph}
+      <BentoGrid className="grid-cols-1 lg:grid-cols-12">
+        <Reveal className="lg:col-span-8" variant="fade-up" duration={750}>
+          <BentoCell variant="card" className="h-full">
+            <p className="tech-label mb-4">
+              <span className="text-accent/80">{'// '}</span>
+              profilo
             </p>
-          ))}
+            <div className="flex flex-col gap-5">
+              {profile.about.map((paragraph, index) => (
+                <p key={index} className="max-w-prose text-sm leading-relaxed text-text-muted sm:text-base">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </BentoCell>
         </Reveal>
 
-        <Reveal className="w-full md:max-w-xs md:shrink-0" delay={180} variant="scale-in" duration={750}>
-          <aside className="border-t border-border pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-8">
+        <Reveal className="lg:col-span-4" delay={180} variant="scale-in" duration={750}>
+          <BentoCell variant="accent" className="h-full">
             <p className="tech-label mb-4">
-              <span className="text-text-muted">{'// '}</span>
+              <span className="text-accent/80">{'// '}</span>
               interessi
             </p>
             <ul className="flex flex-col gap-2">
-              {profile.interests.map((interest) => (
-                <li key={interest} className="font-mono text-xs text-text sm:text-sm">
+              {profile.interests.map((interest, index) => (
+                <li
+                  key={interest}
+                  className={cn(
+                    'font-mono text-xs sm:text-sm',
+                    index < 2 ? 'text-accent' : 'text-text',
+                  )}
+                >
                   {interest}
                 </li>
               ))}
             </ul>
-          </aside>
+          </BentoCell>
         </Reveal>
-      </div>
+      </BentoGrid>
     </Section>
   )
 }

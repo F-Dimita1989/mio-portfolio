@@ -1,6 +1,7 @@
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { formSpamBlacklist, formSubmitEndpoint } from '../../data/contactConfig'
+import { appToast } from '../../lib/appToast'
 import {
   FIELD_LIMITS,
   getSubmitCooldownRemainingMs,
@@ -10,6 +11,7 @@ import {
   markContactSubmitted,
   SUBMIT_COOLDOWN_MS,
 } from '../../lib/contactFormSecurity'
+import { BentoCell } from '../Bento/BentoCell'
 import { RadixIcon } from '../Icon/RadixIcon'
 import { cn } from '../../lib/cn'
 
@@ -70,10 +72,10 @@ export function ContactForm() {
 
     const remaining = getSubmitCooldownRemainingMs()
     if (remaining > 0) {
+      const message = `Attendi ${formatCooldown(Math.ceil(remaining / 1000))} prima di inviare un altro messaggio.`
       setStatus('error')
-      setErrorMessage(
-        `Attendi ${formatCooldown(Math.ceil(remaining / 1000))} prima di inviare un altro messaggio.`,
-      )
+      setErrorMessage(message)
+      appToast.formError(message)
       return
     }
 
@@ -83,14 +85,18 @@ export function ContactForm() {
     const message = fields.message.trim()
 
     if (!name || !email || !message) {
+      const message = 'Compila tutti i campi obbligatori.'
       setStatus('error')
-      setErrorMessage('Compila tutti i campi obbligatori.')
+      setErrorMessage(message)
+      appToast.formError(message)
       return
     }
 
     if (!isValidEmail(email)) {
+      const message = 'Inserisci un indirizzo email valido.'
       setStatus('error')
-      setErrorMessage('Inserisci un indirizzo email valido.')
+      setErrorMessage(message)
+      appToast.formError(message)
       return
     }
 
@@ -99,8 +105,10 @@ export function ContactForm() {
       !isWithinLimit(subject, FIELD_LIMITS.subject) ||
       !isWithinLimit(message, FIELD_LIMITS.message)
     ) {
+      const message = 'Uno o più campi superano la lunghezza massima consentita.'
       setStatus('error')
-      setErrorMessage('Uno o più campi superano la lunghezza massima consentita.')
+      setErrorMessage(message)
+      appToast.formError(message)
       return
     }
 
@@ -136,13 +144,15 @@ export function ContactForm() {
       setFields(initialFields)
       if (honeypotRef.current) honeypotRef.current.value = ''
       setStatus('success')
+      appToast.formSuccess()
     } catch (error) {
-      setStatus('error')
-      setErrorMessage(
+      const message =
         error instanceof Error
           ? error.message
-          : 'Errore durante l\'invio. Riprova o scrivimi direttamente via email.',
-      )
+          : 'Errore durante l\'invio. Riprova o scrivimi direttamente via email.'
+      setStatus('error')
+      setErrorMessage(message)
+      appToast.formError(message)
     }
   }
 
@@ -150,9 +160,11 @@ export function ContactForm() {
   const isDisabled = status === 'sending' || isCooldownActive
 
   return (
-    <form
+    <BentoCell
+      as="form"
+      variant="card"
+      contentClassName="gap-4 sm:gap-5"
       onSubmit={handleSubmit}
-      className="card-surface flex flex-col gap-4 p-4 sm:gap-5 sm:p-6"
       noValidate
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
@@ -267,18 +279,10 @@ export function ContactForm() {
         Questo modulo è protetto da controlli anti-spam e reCAPTCHA di FormSubmit.
       </p>
 
-      <div aria-live="polite" className="min-h-6">
-        {status === 'success' && (
-          <p className="rounded-sm border border-border-accent bg-accent-muted px-3 py-2 font-mono text-xs text-text-heading">
-            Messaggio inviato. Ti risponderò al più presto.
-          </p>
-        )}
-        {status === 'error' && (
-          <p className="rounded-sm border border-red-500/40 bg-red-500/10 px-3 py-2 font-mono text-xs text-red-300">
-            {errorMessage}
-          </p>
-        )}
+      <div className="sr-only" aria-live="polite">
+        {status === 'success' && 'Messaggio inviato. Ti risponderò al più presto.'}
+        {status === 'error' && errorMessage}
       </div>
-    </form>
+    </BentoCell>
   )
 }

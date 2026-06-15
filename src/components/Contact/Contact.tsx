@@ -1,4 +1,7 @@
 import { contacts } from '../../data/contacts'
+import { notifyCvDownload } from '../../lib/appToast'
+import { BentoCell } from '../Bento/BentoCell'
+import { BentoGrid } from '../Bento/BentoGrid'
 import { Reveal } from '../Animate/Reveal'
 import { contactIcons } from '../Icon/contactIcons'
 import { RadixIcon } from '../Icon/RadixIcon'
@@ -23,20 +26,23 @@ export function Contact() {
             <span className="text-text-muted">{'// '}</span>
             altri canali
           </p>
-          <ul className="grid grid-cols-1 gap-px border border-accent bg-accent sm:grid-cols-2 lg:grid-cols-4">
+          <BentoGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {contacts.map((contact, index) => (
-              <Reveal key={contact.id} as="li" delay={index * 70} variant="scale-in" duration={650}>
-                <a
+              <Reveal key={contact.id} as="li" className="list-none" delay={index * 70} variant="scale-in" duration={650}>
+                <BentoCell
+                  as="a"
+                  variant="links"
                   href={contact.href}
-                  className="flex min-h-11 items-start gap-3 bg-bg-card px-4 py-4 transition-[color,transform] duration-200 active:scale-[0.99] active:text-accent motion-safe:hover:text-accent"
+                  className="min-h-full"
                   {...(contact.download ? { download: true } : {})}
                   {...(contact.external
                     ? { target: '_blank', rel: 'noopener noreferrer' }
                     : {})}
+                  {...(contact.id === 'cv' ? { onClick: notifyCvDownload } : {})}
                 >
                   <RadixIcon
                     icon={contactIcons[contact.id]}
-                    className="mt-0.5 text-accent"
+                    className="text-accent"
                     size="md"
                   />
                   <span className="flex min-w-0 flex-col justify-center gap-1">
@@ -47,10 +53,10 @@ export function Contact() {
                       {contact.value}
                     </span>
                   </span>
-                </a>
+                </BentoCell>
               </Reveal>
             ))}
-          </ul>
+          </BentoGrid>
         </div>
       </div>
     </Section>

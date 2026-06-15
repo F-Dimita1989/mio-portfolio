@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AppToaster } from './components/Feedback/AppToaster'
 import { DotGrid } from './components/Backgrounds/DotGrid'
 import { About } from './components/About/About'
 import { Contact } from './components/Contact/Contact'
@@ -8,12 +9,15 @@ import { Header } from './components/Header/Header'
 import { Hero } from './components/Hero/Hero'
 import { IntroScreen } from './components/Intro/IntroScreen'
 import { useIntroScreen } from './hooks/useIntroScreen'
+import { useMatrixButtonHover } from './hooks/useMatrixButtonHover'
 import { Projects } from './components/Projects/Projects'
 import { Skills } from './components/Skills/Skills'
 
 function App() {
   const { showIntro, completeIntro } = useIntroScreen()
   const [pageReady, setPageReady] = useState(!showIntro)
+
+  useMatrixButtonHover()
 
   const handleIntroComplete = () => {
     completeIntro()
@@ -43,6 +47,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <AppToaster />
     </>
   )
 }

@@ -1,5 +1,8 @@
 import { ExternalLinkIcon, GitHubLogoIcon } from '@radix-ui/react-icons'
 import type { Project } from '../../data/projects'
+import type { BentoVariant } from '../Bento/BentoCell'
+import { BentoCell } from '../Bento/BentoCell'
+import { SkillChip } from '../Icon/SkillChip'
 import { RadixIcon } from '../Icon/RadixIcon'
 
 const statusLabels: Record<Project['status'], string> = {
@@ -8,21 +11,32 @@ const statusLabels: Record<Project['status'], string> = {
   concept: 'concept',
 }
 
+const projectVariants: Record<string, BentoVariant> = {
+  sgamapp: 'featured',
+  pillapp: 'accent',
+  portfolio: 'card',
+}
+
 type ProjectCardProps = {
   project: Project
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const variant = projectVariants[project.id] ?? 'card'
+
   return (
-    <article
-      className="card-surface flex h-full flex-col p-4 sm:p-5"
+    <BentoCell
+      as="article"
+      variant={variant}
+      className="h-full"
       aria-labelledby={`project-${project.id}-title`}
     >
-      <div className="mb-3 font-mono text-[0.6875rem] tracking-wide text-text-muted uppercase">
-        <span>{statusLabels[project.status]}</span>
-      </div>
+      <p className="tech-label mb-3">
+        <span className="text-accent/80">{'// '}</span>
+        {statusLabels[project.status]}
+      </p>
 
-      <h3 id={`project-${project.id}-title`} className="mb-2 text-base sm:text-lg">
+      <h3 id={`project-${project.id}-title`} className="mb-2 text-base text-text-heading sm:text-lg">
         {project.title}
       </h3>
       <p className="mb-4 flex-1 text-sm leading-relaxed text-text-muted">
@@ -30,15 +44,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </p>
 
       <ul className="mb-4 flex flex-wrap gap-1.5" aria-label="Tecnologie">
-        {project.tags.map((tag) => (
-          <li key={tag} className="chip">
-            {tag}
+        {project.tags.map((tag, index) => (
+          <li key={tag}>
+            <SkillChip label={tag} accent={index === 0} />
           </li>
         ))}
       </ul>
 
       <div
-        className="mt-auto flex min-h-11 flex-wrap items-center gap-2 border-t border-border pt-4"
+        className="bento-divider mt-auto flex min-h-11 flex-wrap items-center gap-2 border-t pt-4"
         aria-hidden={!project.links?.repo && !project.links?.demo && !project.links?.sito}
       >
         {project.links?.repo && (
@@ -75,6 +89,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </a>
         )}
       </div>
-    </article>
+    </BentoCell>
   )
 }

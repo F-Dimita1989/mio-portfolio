@@ -3,29 +3,43 @@ import {
   experienceTimeline,
   type TimelineItem,
 } from '../../data/education'
+import type { BentoVariant } from '../Bento/BentoCell'
+import { BentoCell } from '../Bento/BentoCell'
+import { BentoGrid } from '../Bento/BentoGrid'
 import { Reveal } from '../Animate/Reveal'
 import { Section } from '../Section/Section'
 
+const timelineVariants: Record<string, BentoVariant> = {
+  'its-apulia': 'accent',
+  'rosa-luxemburg': 'card',
+  techloop: 'accent',
+  sgamapp: 'featured',
+}
+
+const leftRailIds = new Set(['its-apulia', 'rosa-luxemburg', 'techloop', 'sgamapp'])
+
 function TimelineList({ items, startDelay = 0 }: { items: TimelineItem[]; startDelay?: number }) {
   return (
-    <ol className="flex flex-col border-l border-border">
-      {items.map((item, index) => (
+    <BentoGrid className="grid-cols-1">
+      {items.map((item, index) => {
+        const variant = timelineVariants[item.id] ?? 'card'
+
+        return (
         <Reveal
           key={item.id}
           as="li"
+          className="list-none"
           delay={startDelay + index * 110}
-          variant="slide-right"
+          variant="fade-up"
           duration={750}
         >
-          <article className="relative border-b border-border py-6 pl-6 last:border-b-0 sm:pl-8">
-            <span
-              className="absolute top-7 left-0 size-1.5 -translate-x-1/2 bg-accent motion-safe:animate-pulse"
-              aria-hidden="true"
-            />
-            <time className="mb-2 block font-mono text-[0.6875rem] tracking-wide text-accent uppercase">
-              {item.period}
-            </time>
-            <h3 className="mb-1 text-base sm:text-lg">{item.title}</h3>
+          <BentoCell
+            as="article"
+            variant={variant}
+            className={leftRailIds.has(item.id) ? 'bento-cell--accent-rail' : undefined}
+          >
+            <time className="tech-label mb-3 block text-accent">{item.period}</time>
+            <h3 className="mb-1 text-base text-text-heading sm:text-lg">{item.title}</h3>
             {item.organization && (
               <p className="mb-2 font-mono text-xs text-text-muted">{item.organization}</p>
             )}
@@ -33,7 +47,7 @@ function TimelineList({ items, startDelay = 0 }: { items: TimelineItem[]; startD
               <p className="max-w-prose text-sm leading-relaxed text-text-muted">{item.description}</p>
             )}
             {item.highlights && (
-              <ul className="mt-2 flex max-w-prose flex-col gap-1.5">
+              <ul className="mt-3 flex max-w-prose flex-col gap-1.5">
                 {item.highlights.map((highlight) => (
                   <li
                     key={highlight}
@@ -44,10 +58,11 @@ function TimelineList({ items, startDelay = 0 }: { items: TimelineItem[]; startD
                 ))}
               </ul>
             )}
-          </article>
+          </BentoCell>
         </Reveal>
-      ))}
-    </ol>
+        )
+      })}
+    </BentoGrid>
   )
 }
 
