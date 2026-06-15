@@ -29,7 +29,6 @@ function buildFolderPaperItems() {
         ) : (
           <span className="folder-paper-status">In corso</span>
         )}
-        <span className="folder-paper-action">Apri card</span>
       </div>
     )
   })
