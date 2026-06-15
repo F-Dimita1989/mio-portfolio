@@ -2,12 +2,16 @@
   "rewrites": [
     {
       "source": "/Filippo_Dimita_CV_Cat_Prot.pdf",
-      "destination": "/Filippo_Dimita_CV.pdf"
+      "destination": "/cv/Filippo_Dimita_CV.pdf"
+    },
+    {
+      "source": "/Filippo_Dimita_CV.pdf",
+      "destination": "/cv/Filippo_Dimita_CV.pdf"
     }
   ],
   "headers": [
     {
-      "source": "/Filippo_Dimita_CV.pdf",
+      "source": "/cv/Filippo_Dimita_CV.pdf",
       "headers": [
         {
           "key": "Content-Type",
