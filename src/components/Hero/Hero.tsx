@@ -1,5 +1,7 @@
+import { EnvelopeClosedIcon, RocketIcon } from '@radix-ui/react-icons'
 import { profile } from '../../data/profile'
 import { Reveal } from '../Animate/Reveal'
+import { RadixIcon } from '../Icon/RadixIcon'
 
 const stackItems = [
   'React',
@@ -44,10 +46,12 @@ export function Hero() {
 
           <Reveal immediate variant="fade-up" delay={460} duration={700}>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <a href="#projects" className="btn-primary">
+              <a href="#projects" className="btn-primary gap-2">
+                <RadixIcon icon={RocketIcon} />
                 Progetti
               </a>
-              <a href="#contact" className="btn-secondary">
+              <a href="#contact" className="btn-secondary gap-2">
+                <RadixIcon icon={EnvelopeClosedIcon} />
                 Contatti
               </a>
             </div>

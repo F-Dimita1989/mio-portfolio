@@ -1,3 +1,4 @@
+import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { formSpamBlacklist, formSubmitEndpoint } from '../../data/contactConfig'
 import {
@@ -9,6 +10,7 @@ import {
   markContactSubmitted,
   SUBMIT_COOLDOWN_MS,
 } from '../../lib/contactFormSecurity'
+import { RadixIcon } from '../Icon/RadixIcon'
 import { cn } from '../../lib/cn'
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error'
@@ -243,14 +245,19 @@ export function ContactForm() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          className={cn('btn-primary', (status === 'sending' || isCooldownActive) && 'opacity-70')}
+          className={cn('btn-primary gap-2', (status === 'sending' || isCooldownActive) && 'opacity-70')}
           disabled={isDisabled}
         >
-          {status === 'sending'
-            ? 'Invio in corso...'
-            : isCooldownActive
-              ? `Attendi ${Math.ceil(cooldownMs / 1000)}s`
-              : 'Invia messaggio'}
+          {status === 'sending' ? (
+            'Invio in corso...'
+          ) : isCooldownActive ? (
+            `Attendi ${Math.ceil(cooldownMs / 1000)}s`
+          ) : (
+            <>
+              <RadixIcon icon={PaperPlaneIcon} />
+              Invia messaggio
+            </>
+          )}
         </button>
 
         <p className="font-mono text-[0.6875rem] text-text-muted">* obbligatori</p>

@@ -1,4 +1,6 @@
+import { ExternalLinkIcon, GitHubLogoIcon } from '@radix-ui/react-icons'
 import type { Project } from '../../data/projects'
+import { RadixIcon } from '../Icon/RadixIcon'
 
 const statusLabels: Record<Project['status'], string> = {
   'in-progress': 'in corso',
@@ -42,30 +44,33 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {project.links?.repo && (
           <a
             href={project.links.repo}
-            className="btn-secondary !min-h-10 !w-auto px-3 text-[0.6875rem]"
+            className="btn-secondary !min-h-10 !w-auto gap-1.5 px-3 text-[0.6875rem]"
             target="_blank"
             rel="noopener noreferrer"
           >
+            <RadixIcon icon={GitHubLogoIcon} size="sm" />
             Repo
           </a>
         )}
         {project.links?.demo && (
           <a
             href={project.links.demo}
-            className="btn-secondary !min-h-10 !w-auto px-3 text-[0.6875rem]"
+            className="btn-secondary !min-h-10 !w-auto gap-1.5 px-3 text-[0.6875rem]"
             target="_blank"
             rel="noopener noreferrer"
           >
+            <RadixIcon icon={ExternalLinkIcon} size="sm" />
             Demo
           </a>
         )}
         {project.links?.sito && (
           <a
             href={project.links.sito}
-            className="btn-secondary !min-h-10 !w-auto px-3 text-[0.6875rem]"
+            className="btn-secondary !min-h-10 !w-auto gap-1.5 px-3 text-[0.6875rem]"
             target="_blank"
             rel="noopener noreferrer"
           >
+            <RadixIcon icon={ExternalLinkIcon} size="sm" />
             Sito
           </a>
         )}

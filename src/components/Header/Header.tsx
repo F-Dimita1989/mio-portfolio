@@ -1,8 +1,10 @@
+import { Cross2Icon, HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { useEffect, useState } from 'react'
 import { navItems } from '../../data/navigation'
 import { profile } from '../../data/profile'
 import { cn } from '../../lib/cn'
 import { Logo } from '../Logo/Logo'
+import { RadixIcon } from '../Icon/RadixIcon'
 
 const bannerHeaderSrc = encodeURI('/ChatGPT Image 15 giu 2026, 12_06_05.png')
 
@@ -106,20 +108,10 @@ export function Header() {
             aria-label={menuOpen ? 'Chiudi menu' : 'Apri menu'}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <svg
-              className="size-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              {menuOpen ? (
-                <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
-              ) : (
-                <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
-              )}
-            </svg>
+            <RadixIcon
+              icon={menuOpen ? Cross2Icon : HamburgerMenuIcon}
+              size="lg"
+            />
           </button>
 
           <nav
