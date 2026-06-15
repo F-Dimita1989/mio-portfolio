@@ -34,7 +34,9 @@ export function Contact() {
                   variant="links"
                   href={contact.href}
                   className="min-h-full"
-                  {...(contact.download ? { download: true } : {})}
+                  {...(contact.download
+                    ? { download: contact.download === true ? '' : contact.download }
+                    : {})}
                   {...(contact.external
                     ? { target: '_blank', rel: 'noopener noreferrer' }
                     : {})}

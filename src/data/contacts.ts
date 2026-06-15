@@ -6,7 +6,7 @@ export type ContactLink = {
   value: string
   href: string
   external?: boolean
-  download?: boolean
+  download?: boolean | string
 }
 
 export const contacts: ContactLink[] = [
@@ -35,6 +35,6 @@ export const contacts: ContactLink[] = [
     label: 'CV',
     value: 'Scarica il mio CV',
     href: '/Filippo_Dimita_CV_Cat_Prot.pdf',
-    download: true,
+    download: 'Filippo_Dimita_CV.pdf',
   },
 ]

@@ -88,7 +88,12 @@ export function HeroBento() {
             )}
             {cvContact && (
               <li>
-                <a href={cvContact.href} download className="bento-link" onClick={notifyCvDownload}>
+                <a
+                  href={cvContact.href}
+                  download={cvContact.download === true ? '' : cvContact.download}
+                  className="bento-link"
+                  onClick={notifyCvDownload}
+                >
                   <RadixIcon icon={FileTextIcon} className="text-accent" />
                   Scarica CV
                 </a>
