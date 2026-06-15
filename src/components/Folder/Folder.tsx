@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
+import { useEffect, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
 import './Folder.css'
 
 const MAX_ITEMS = 3
@@ -11,6 +11,8 @@ type FolderProps = {
   items?: ReactNode[]
   className?: string
   ariaLabel?: string
+  onOpenChange?: (open: boolean) => void
+  onPaperClick?: (index: number) => void
 }
 
 export function Folder({
@@ -19,6 +21,8 @@ export function Folder({
   items = [],
   className = '',
   ariaLabel = 'Apri cartella progetti',
+  onOpenChange,
+  onPaperClick,
 }: FolderProps) {
   const papers: (ReactNode | null)[] = items.slice(0, MAX_ITEMS)
   while (papers.length < MAX_ITEMS) {
@@ -29,6 +33,10 @@ export function Folder({
   const [paperOffsets, setPaperOffsets] = useState<PaperOffset[]>(
     Array.from({ length: MAX_ITEMS }, () => ({ x: 0, y: 0 })),
   )
+
+  useEffect(() => {
+    onOpenChange?.(open)
+  }, [open, onOpenChange])
 
   const folderBackColor = '#0e1622'
   const paper1 = '#0e1622'
@@ -98,7 +106,10 @@ export function Folder({
               className={`paper paper-${i + 1}`}
               onMouseMove={(e) => handlePaperMouseMove(e, i)}
               onMouseLeave={() => handlePaperMouseLeave(i)}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (open) onPaperClick?.(i)
+              }}
               style={
                 open
                   ? ({

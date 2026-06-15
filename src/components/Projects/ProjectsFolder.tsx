@@ -1,17 +1,14 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, m } from 'motion/react'
 import { projects } from '../../data/projects'
-import { useIsDesktop } from '../../hooks/useMinWidth'
+import { scrollToCenter } from '../../lib/scrollToRoute'
 import { Folder } from '../Folder/Folder'
+import { ProjectCard } from './ProjectCard'
 
-export function ProjectsFolder() {
-  const isDesktop = useIsDesktop()
+const folderProjects = projects.slice(0, 3)
 
-  if (!isDesktop) {
-    return null
-  }
-
-  const folderProjects = projects.slice(0, 3)
-
-  const items = folderProjects.map((project) => {
+function buildFolderPaperItems() {
+  return folderProjects.map((project) => {
     const link = project.links?.sito ?? project.links?.demo ?? project.links?.repo
 
     return (
@@ -27,19 +24,85 @@ export function ProjectsFolder() {
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
           >
-            Apri →
+            Apri sito →
           </a>
         ) : (
           <span className="folder-paper-status">In corso</span>
         )}
+        <span className="folder-paper-action">Apri card</span>
       </div>
     )
   })
+}
+
+export function ProjectsFolder() {
+  const [folderOpen, setFolderOpen] = useState(false)
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const folderPaperItems = useMemo(() => buildFolderPaperItems(), [])
+
+  const selectedProject = folderProjects.find((project) => project.id === selectedProjectId)
+
+  useEffect(() => {
+    if (!selectedProjectId) return
+
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (cardRef.current) scrollToCenter(cardRef.current)
+      })
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [selectedProjectId])
+
+  const handleFolderOpenChange = useCallback((open: boolean) => {
+    setFolderOpen(open)
+    if (!open) {
+      setSelectedProjectId(null)
+    }
+  }, [])
+
+  const handlePaperClick = useCallback((index: number) => {
+    const project = folderProjects[index]
+    if (!project) return
+    setSelectedProjectId(project.id)
+  }, [])
+
+  const hint = !folderOpen
+    ? 'Clicca la cartella per sfogliare i progetti'
+    : selectedProject
+      ? `Card aperta: ${selectedProject.title}`
+      : 'Clicca un documento per aprire la card del progetto'
 
   return (
-    <div className="folder-stage mb-8">
-      <Folder color="#3dd9ee" size={2.5} items={items} ariaLabel="Cartella progetti — clicca per aprire" />
-      <p className="folder-stage-hint">Clicca la cartella per sfogliare i progetti</p>
+    <div className="flex flex-col">
+      <div className="folder-stage mb-0">
+        <Folder
+          color="#3dd9ee"
+          size={2.5}
+          items={folderPaperItems}
+          ariaLabel="Cartella progetti — clicca per aprire"
+          onOpenChange={handleFolderOpenChange}
+          onPaperClick={handlePaperClick}
+        />
+        <p className="folder-stage-hint">{hint}</p>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {folderOpen && selectedProject && (
+          <m.div
+            ref={cardRef}
+            key={selectedProject.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="mx-auto mt-8 w-full max-w-xl"
+          >
+            <ProjectCard project={selectedProject} />
+          </m.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

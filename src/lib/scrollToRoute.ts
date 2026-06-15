@@ -44,6 +44,12 @@ export function scrollToRoute(key: RouteKey, behavior: ScrollBehavior = 'smooth'
   }
 }
 
+export function scrollToCenter(element: HTMLElement, behavior: ScrollBehavior = 'smooth') {
+  const rect = element.getBoundingClientRect()
+  const top = rect.top + window.scrollY - (window.innerHeight - rect.height) / 2
+  window.scrollTo({ top: Math.max(0, top), behavior })
+}
+
 export function syncRouteFromHash(behavior: ScrollBehavior = 'auto') {
   const key = resolveRouteKey(window.location.hash)
   if (key) scrollToRoute(key, behavior)
