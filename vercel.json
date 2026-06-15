@@ -1,7 +1,7 @@
 {
   "headers": [
     {
-      "source": "/(.*\\.pdf)",
+      "source": "/Filippo_Dimita_CV.pdf",
       "headers": [
         {
           "key": "Content-Type",
@@ -9,17 +9,12 @@
         },
         {
           "key": "Content-Disposition",
-          "value": "attachment; filename=\"Filippo_Dimita_CV.pdf\""
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=63072000; includeSubDomains; preload"
-        },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
+          "value": "attachment; filename=Filippo_Dimita_CV.pdf"
+        }
       ]
     },
     {
-      "source": "/((?!.*\\.(pdf|png|jpg|jpeg|gif|webp|ico|svg|woff2?|css|js|map)$).*)",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Content-Security-Policy",
