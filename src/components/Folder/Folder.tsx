@@ -30,6 +30,7 @@ export function Folder({
   }
 
   const [open, setOpen] = useState(false)
+  const [hoveredPaper, setHoveredPaper] = useState<number | null>(null)
   const [paperOffsets, setPaperOffsets] = useState<PaperOffset[]>(
     Array.from({ length: MAX_ITEMS }, () => ({ x: 0, y: 0 })),
   )
@@ -47,6 +48,7 @@ export function Folder({
     setOpen((prev) => {
       if (prev) {
         setPaperOffsets(Array.from({ length: MAX_ITEMS }, () => ({ x: 0, y: 0 })))
+        setHoveredPaper(null)
       }
       return !prev
     })
@@ -67,6 +69,7 @@ export function Folder({
   }
 
   const handlePaperMouseLeave = (index: number) => {
+    setHoveredPaper((current) => (current === index ? null : current))
     setPaperOffsets((prev) => {
       const newOffsets = [...prev]
       newOffsets[index] = { x: 0, y: 0 }
@@ -103,7 +106,10 @@ export function Folder({
           {papers.map((item, i) => (
             <div
               key={i}
-              className={`paper paper-${i + 1}`}
+              className={`paper paper-${i + 1}${hoveredPaper === i ? ' paper--raised' : ''}`}
+              onMouseEnter={() => {
+                if (open) setHoveredPaper(i)
+              }}
               onMouseMove={(e) => handlePaperMouseMove(e, i)}
               onMouseLeave={() => handlePaperMouseLeave(i)}
               onClick={(e) => {
