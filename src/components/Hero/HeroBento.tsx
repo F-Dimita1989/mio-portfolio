@@ -90,7 +90,8 @@ export function HeroBento() {
               <li>
                 <a
                   href={cvContact.href}
-                  download={cvContact.download === true ? '' : cvContact.download}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bento-link"
                   onClick={notifyCvDownload}
                 >

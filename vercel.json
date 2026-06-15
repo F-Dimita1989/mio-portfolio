@@ -11,15 +11,15 @@
   ],
   "headers": [
     {
-      "source": "/cv/Filippo_Dimita_CV.pdf",
+      "source": "/cv/(.*)",
       "headers": [
         {
-          "key": "Content-Type",
-          "value": "application/pdf"
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"Filippo_Dimita_CV.pdf\""
         },
         {
-          "key": "Content-Disposition",
-          "value": "attachment; filename=\"Filippo_Dimita_CV.pdf\""
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     },
