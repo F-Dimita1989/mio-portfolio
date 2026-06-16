@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Filippo Dimita',
   role: 'Web Developer',
-  location: 'Santeramo in Colle, provincia di Bari',
+  location: 'Santeramo in Colle, 70029 BA',
   bio: 'Sviluppatore frontend specializzato in React e TypeScript. Realizzo UI responsive e applicazioni web moderne, con attenzione a performance, UX e clean code. In formazione continua su .NET/C# per orientarmi verso il full stack.',
   about: [
     'Mi concentro sullo sviluppo frontend con React e TypeScript: componenti riutilizzabili, layout responsive e interfacce curate nel dettaglio.',

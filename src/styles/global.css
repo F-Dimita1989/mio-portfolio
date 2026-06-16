@@ -439,6 +439,28 @@
     background:
       linear-gradient(135deg, var(--color-bento-deep) 0%, var(--color-bento-surface) 100%);
   }
+
+  .footer-inner {
+    @apply flex w-full min-w-0 flex-col gap-3 font-mono text-xs leading-relaxed tracking-wide text-text-muted;
+  }
+
+  .footer-brand {
+    @apply shrink-0;
+  }
+
+  .footer-meta {
+    @apply min-w-0 break-words;
+  }
+
+  @media (min-width: 640px) and (hover: hover) and (pointer: fine) {
+    .footer-inner {
+      @apply flex-row items-center justify-between gap-6;
+    }
+
+    .footer-meta {
+      @apply text-right;
+    }
+  }
 }
 
 @keyframes tech-comment-blink {
