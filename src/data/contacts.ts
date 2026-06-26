@@ -11,6 +11,12 @@ export type ContactLink = {
 
 export const contacts: ContactLink[] = [
   {
+    id: 'phone',
+    label: 'Telefono',
+    value: '+39 327 197 3302',
+    href: 'tel:+393271973302',
+  },
+  {
     id: 'email',
     label: 'Email',
     value: contactEmail,
@@ -19,21 +25,21 @@ export const contacts: ContactLink[] = [
   {
     id: 'github',
     label: 'GitHub',
-    value: 'github.com/F-Dimita1989',
+    value: 'F-Dimita1989',
     href: 'https://github.com/F-Dimita1989',
     external: true,
   },
   {
     id: 'linkedin',
     label: 'LinkedIn',
-    value: 'filippo-dimita-web89',
+    value: 'filippo-dimita',
     href: 'https://www.linkedin.com/in/filippo-dimita-web89/',
     external: true,
   },
   {
     id: 'cv',
     label: 'CV',
-    value: 'Scarica il mio CV',
+    value: 'Scarica PDF',
     href: '/cv/Filippo_Dimita_CV.pdf',
     external: true,
   },

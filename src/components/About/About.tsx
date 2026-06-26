@@ -13,7 +13,7 @@ export function About() {
       id={routeId('profilo')}
       eyebrow="about"
       title="Chi sono"
-      subtitle="Frontend, formazione full stack e valori che guidano il mio lavoro."
+      subtitle="Full stack, UX/UI e valori che guidano il mio lavoro."
       alt
     >
       <MotionStaggerGrid className="grid-cols-1 lg:grid-cols-12">

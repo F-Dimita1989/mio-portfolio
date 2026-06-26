@@ -9,7 +9,6 @@ export const skillGroups: SkillGroup[] = [
     items: [
       'React',
       'React Native',
-      'Next.js',
       'Angular',
       'TypeScript',
       'JavaScript',
@@ -21,7 +20,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     category: 'Backend',
-    items: ['C# / .NET', 'Supabase'],
+    items: ['C# / .NET', 'PHP / Laravel', 'Supabase', 'Docker'],
   },
   {
     category: 'Database',
@@ -29,6 +28,6 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     category: 'Tools & Altro',
-    items: ['Git', 'GitHub', 'WordPress', 'Python'],
+    items: ['Git', 'GitHub', 'WordPress', 'Python', 'Ollama', 'Render', 'Vercel'],
   },
 ]

@@ -275,6 +275,7 @@
   .bento-cell {
     @apply relative flex h-full flex-col overflow-hidden p-4 sm:p-5;
     background-color: var(--color-bento-surface);
+    transition: box-shadow 0.3s ease;
   }
 
   .bento-cell::before {
@@ -381,12 +382,19 @@
   .bento-cell--card {
     background:
       linear-gradient(165deg, var(--color-bento-elevated) 0%, var(--color-bento-surface) 62%);
-    transition: box-shadow 0.3s ease;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .bento-cell--card:hover {
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    .bento-cell:hover {
       box-shadow: inset 0 1px 0 0 rgb(61 217 238 / 0.14);
+    }
+
+    .bento-cell--accent:hover,
+    .bento-cell--card.bento-cell--accent-rail:hover,
+    .bento-cell--featured.bento-cell--accent-rail:hover {
+      box-shadow:
+        inset 3px 0 0 0 var(--color-accent),
+        inset 0 1px 0 0 rgb(61 217 238 / 0.14);
     }
   }
 
@@ -401,6 +409,25 @@
 
   a.bento-cell--links {
     @apply transition-[color,background-color,transform] duration-200 active:scale-[0.99] motion-safe:hover:text-accent;
+  }
+
+  .contact-link-card {
+    min-height: 4.5rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .contact-link-value {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 768px) {
+    .contact-link-value {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .bento-cell--links .bento-link {

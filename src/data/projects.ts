@@ -16,16 +16,16 @@ export const projects: Project[] = [
     id: 'pillapp',
     title: 'PillApp',
     description:
-      'Applicazione per la gestione dei farmaci durante una terapia farmacologica. Il backend è già operativo con database su Supabase; il frontend è in sviluppo attivo.',
-    tags: ['React Native', 'Supabase', '.NET / C#', 'Health Tech'],
+      'Mobile app healthcare per la gestione dei farmaci in terapia. Frontend React Native, backend .NET e database Supabase, con OCR nativo personalizzato e integrazione API AIFA.',
+    tags: ['React Native', 'Supabase', '.NET / C#', 'Health Tech', 'OCR'],
     status: 'in-progress',
   },
   {
     id: 'sgamapp',
     title: 'SgamApp',
     description:
-      'Sviluppo e manutenzione dell’applicazione web. Interfacce responsive con React e Tailwind CSS, funzionalità frontend moderne.',
-    tags: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'Git'],
+      'Sviluppo e manutenzione dell’applicazione web: UI responsive con React e Tailwind CSS, backend C#/.NET su Render, frontend su Vercel, proxy API verso AI e branding visivo del progetto.',
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'C# / .NET', 'Render', 'Vercel', 'Git'],
     status: 'in-progress',
     links: {
       sito: 'https://sgamapp.vercel.app',

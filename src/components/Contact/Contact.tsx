@@ -26,14 +26,16 @@ export function Contact() {
 
         <div>
           <TechComment text="altri canali" className="mb-4" prefixTone="muted" delay={80} />
-          <MotionStaggerGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <MotionStaggerGrid className="grid-cols-1 md:grid-cols-5">
             {contacts.map((contact) => (
               <MotionReveal key={contact.id} as="li" className="list-none" variant="scale-in">
                 <BentoCell
                   as="a"
                   variant="links"
+                  contentClassName="flex-col items-start gap-2"
                   href={contact.href}
-                  className="min-h-full"
+                  className="contact-link-card h-full"
+                  title={contact.value}
                   {...(contact.download
                     ? { download: contact.download === true ? '' : contact.download }
                     : {})}
@@ -42,18 +44,18 @@ export function Contact() {
                     : {})}
                   {...(contact.id === 'cv' ? { onClick: notifyCvDownload } : {})}
                 >
-                  <RadixIcon
-                    icon={contactIcons[contact.id]}
-                    className="text-accent"
-                    size="md"
-                  />
-                  <span className="flex min-w-0 flex-col justify-center gap-1">
-                    <span className="font-mono text-[0.6875rem] tracking-wide text-text-muted uppercase">
+                  <span className="flex min-w-0 items-center gap-2">
+                    <RadixIcon
+                      icon={contactIcons[contact.id]}
+                      className="shrink-0 text-accent"
+                      size="sm"
+                    />
+                    <span className="font-mono text-[0.625rem] tracking-wide text-text-muted uppercase">
                       {contact.label}
                     </span>
-                    <span className="text-sm break-all text-text-heading">
-                      {contact.value}
-                    </span>
+                  </span>
+                  <span className="contact-link-value w-full text-sm text-text-heading">
+                    {contact.value}
                   </span>
                 </BentoCell>
               </MotionReveal>

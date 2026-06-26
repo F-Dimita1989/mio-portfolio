@@ -14,11 +14,12 @@ import { Section } from '../Section/Section'
 const timelineVariants: Record<string, BentoVariant> = {
   'its-apulia': 'accent',
   'rosa-luxemburg': 'card',
+  pillapp: 'featured',
   techloop: 'accent',
   sgamapp: 'featured',
 }
 
-const leftRailIds = new Set(['its-apulia', 'rosa-luxemburg', 'techloop', 'sgamapp'])
+const leftRailIds = new Set(['its-apulia', 'rosa-luxemburg', 'pillapp', 'techloop', 'sgamapp'])
 
 function TimelineList({ items }: { items: TimelineItem[] }) {
   return (

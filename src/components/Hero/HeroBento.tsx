@@ -21,14 +21,14 @@ import { SkillChip } from '../Icon/SkillChip'
 const stackItems = [
   'React',
   'React Native',
-  'Next.js',
   'TypeScript',
-  'JavaScript',
-  'Vite',
+  'Angular',
   'Tailwind CSS',
   'C# / .NET',
+  'Docker',
   'Supabase',
   'MySQL',
+  'Ollama',
 ]
 
 const featuredProject = projects.find((project) => project.id === 'sgamapp') ?? projects[0]
@@ -64,7 +64,7 @@ export function HeroBento() {
           <p className="mb-2 font-mono text-sm text-accent sm:text-base">{profile.role}</p>
           <p className="mb-4 text-sm leading-relaxed text-text-muted">{profile.location}</p>
           <p className="mt-auto font-mono text-[0.6875rem] tracking-wide text-accent-secondary uppercase">
-            Full stack in formazione · Frontend-first
+            React/TS · C#/.NET · UX/UI
           </p>
         </BentoCell>
       </MotionReveal>

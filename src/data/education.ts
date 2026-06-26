@@ -25,6 +25,16 @@ export const educationTimeline: TimelineItem[] = [
 
 export const experienceTimeline: TimelineItem[] = [
   {
+    id: 'pillapp',
+    period: '2026 – in lavorazione',
+    title: 'Full Stack Developer — PillApp',
+    highlights: [
+      'Ideazione, progettazione e sviluppo di PillApp, mobile app healthcare in React Native con backend .NET e database Supabase',
+      'Implementazione di OCR nativo personalizzato',
+      'Gestione e aggiornamento API dell’AIFA (Agenzia italiana del farmaco)',
+    ],
+  },
+  {
     id: 'techloop',
     period: '01/2026 – 05/2026',
     title: 'Stage — Sviluppo software',
@@ -43,6 +53,9 @@ export const experienceTimeline: TimelineItem[] = [
       'Creazione interfacce responsive con React e Tailwind CSS',
       'Implementazione funzionalità frontend moderne e ottimizzazione UX',
       'Gestione database MySQL/SQLite',
+      'Creazione backend in C#/.NET e implementazione API con deploy su Render e Vercel',
+      'Idealizzazione e creazione loghi, immagini e mascotte per il progetto',
+      'Gestione endpoint e creazione proxy per collegamento API tra frontend, backend e AI',
       'Utilizzo di Git e GitHub per il versionamento del progetto',
     ],
   },
