@@ -90,8 +90,7 @@ export function HeroBento() {
               <li>
                 <a
                   href={cvContact.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download="Filippo_Dimita_CV.pdf"
                   className="bento-link"
                   onClick={notifyCvDownload}
                 >

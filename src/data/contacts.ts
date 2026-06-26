@@ -41,6 +41,6 @@ export const contacts: ContactLink[] = [
     label: 'CV',
     value: 'Scarica PDF',
     href: '/cv/Filippo_Dimita_CV.pdf',
-    external: true,
+    download: 'Filippo_Dimita_CV.pdf',
   },
 ]

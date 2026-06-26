@@ -14,8 +14,12 @@
       "source": "/cv/(.*)",
       "headers": [
         {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
           "key": "Content-Disposition",
-          "value": "inline; filename=\"Filippo_Dimita_CV.pdf\""
+          "value": "attachment; filename=\"Filippo_Dimita_CV.pdf\""
         },
         {
           "key": "Cache-Control",
