@@ -17,19 +17,7 @@ import { TechComment } from '../Animate/TechComment'
 import { BentoCell } from '../Bento/BentoCell'
 import { RadixIcon } from '../Icon/RadixIcon'
 import { SkillChip } from '../Icon/SkillChip'
-
-const stackItems = [
-  'React',
-  'React Native',
-  'TypeScript',
-  'Angular',
-  'Tailwind CSS',
-  'C# / .NET',
-  'Docker',
-  'Supabase',
-  'MySQL',
-  'Ollama',
-]
+import { heroStackItems } from '../../data/skills'
 
 const featuredProject = projects.find((project) => project.id === 'sgamapp') ?? projects[0]
 const githubContact = contacts.find((contact) => contact.id === 'github')
@@ -141,7 +129,7 @@ export function HeroBento() {
         <BentoCell variant="muted">
           <TechComment text="stack" className="mb-4" textTone="accent" immediate delay={80} />
           <ul className="flex flex-wrap gap-1.5 bento-chip-list">
-            {stackItems.map((item, index) => (
+            {heroStackItems.map((item, index) => (
               <li key={item}>
                 <SkillChip
                   label={item}

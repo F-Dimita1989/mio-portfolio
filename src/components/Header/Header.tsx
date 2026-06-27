@@ -8,8 +8,7 @@ import { profile } from '../../data/profile'
 import { cn } from '../../lib/cn'
 import { Logo } from '../Logo/Logo'
 import { RadixIcon } from '../Icon/RadixIcon'
-
-const bannerHeaderSrc = encodeURI('/ChatGPT Image 15 giu 2026, 12_06_05.png')
+import bannerHeader from '../../assets/banner-header.png'
 
 const sectionIds = navItems.map((item) => item.id)
 
@@ -74,7 +73,7 @@ export function Header() {
     <header className="relative z-[100]">
       <div className="relative w-full overflow-hidden border-b border-border bg-bg-banner lg:aspect-[1915/657]">
         <m.img
-          src={bannerHeaderSrc}
+          src={bannerHeader}
           alt="Banner hero Filippo Dimita"
           width={1915}
           height={821}

@@ -3,6 +3,20 @@ export type SkillGroup = {
   items: string[]
 }
 
+/** Stack in evidenza nella hero — sottoinsieme curato di `skillGroups` */
+export const heroStackItems = [
+  'React',
+  'React Native',
+  'TypeScript',
+  'Angular',
+  'Tailwind CSS',
+  'C# / .NET',
+  'Docker',
+  'Supabase',
+  'MySQL',
+  'Ollama',
+] as const
+
 export const skillGroups: SkillGroup[] = [
   {
     category: 'Frontend',

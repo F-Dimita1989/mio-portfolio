@@ -45,7 +45,7 @@ mio-portfolio/
 |   |-- data/        # Contenuti editabili
 |   |-- hooks/       # useInView, useIntroScreen
 |   |-- lib/         # Utilità (cn, sicurezza form)
-|   |-- styles/      # global.css + tema Tailwind
+|   |-- styles/      # global.css, intro.css, toaster.css + tema Tailwind
 |   |-- App.tsx
 |   `-- main.tsx
 |-- vercel.json
@@ -63,7 +63,7 @@ mio-portfolio/
 | `src/data/education.ts` | Formazione ed esperienze |
 | `src/data/contacts.ts` | Link contatti |
 | `src/data/contactConfig.ts` | Email e endpoint FormSubmit |
-| `src/data/navigation.ts` | Voci del menu |
+| `src/data/routes.ts` | Route, hash e voci del menu |
 
 ## Avvio in locale
 
@@ -91,6 +91,8 @@ Apri `http://localhost:5173`.
 | `npm run build` | Build produzione in `dist/` |
 | `npm run preview` | Anteprima build |
 | `npm run lint` | ESLint |
+| `npm run test` | Test unitari (Vitest) |
+| `npm run test:watch` | Test in modalità watch |
 
 ## Form contatti
 
@@ -112,7 +114,11 @@ Dopo la conferma i messaggi arrivano su `f.dimita1989@gmail.com`.
 - Validazione email e limiti lunghezza campi
 - Cooldown 60 secondi tra invii
 
-### Email invisibile (opzionale)
+### Email invisibile (consigliato in produzione)
+
+Dopo l'attivazione FormSubmit, usa il token "email invisibile" per non esporre l'indirizzo nell'endpoint del bundle.
+
+**Locale:**
 
 ```bash
 cp .env.example .env
@@ -121,6 +127,8 @@ cp .env.example .env
 ```env
 VITE_FORMSUBMIT_TOKEN=il-tuo-token-formsubmit
 ```
+
+**Vercel:** Settings → Environment Variables → aggiungi `VITE_FORMSUBMIT_TOKEN` per Production (e Preview se serve), poi rideploy.
 
 ## Deploy
 
@@ -142,7 +150,7 @@ VITE_FORMSUBMIT_TOKEN=il-tuo-token-formsubmit
 - Segreti solo in `.env` (escluso da git)
 - Link esterni con `rel="noopener noreferrer"`
 - Validazione input lato client
-- Security headers in produzione
+- Security headers completi su tutte le route (Vercel)
 
 ## Accessibilità e UX
 
